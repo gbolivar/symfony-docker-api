@@ -1,0 +1,17 @@
+version: "3.2"
+services:
+  net_machine:
+    image: alpine
+    container_name:  developed-platform-network
+    command: echo "installed networks"
+    restart: always
+    networks:
+      dev_net:
+
+networks:
+  dev_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.20.0.0/24

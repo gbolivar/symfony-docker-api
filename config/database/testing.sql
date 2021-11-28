@@ -1,0 +1,2 @@
+CREATE DATABASE IF NOT EXISTS api_main_db;
+GRANT ALL PRIVILEGES ON api_main_db.* TO 'root' IDENTIFIED BY 'root';

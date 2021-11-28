@@ -1,0 +1,43 @@
+version: '3.5'
+
+services:
+  developed-platform-web-api:
+    container_name: developed-platform-web-api
+    build:
+      context: ./../../config/api/nginx
+      args:
+        UID: $U_ID
+    ports:
+      - 250:80
+    volumes:
+      - ./../../code/php/api/public:/appdata/www/public
+      - ./../../log/nginx/api:/log
+    networks:
+      dev_net:
+        ipv4_address: 10.20.0.4
+
+
+  developed-platform-be:
+    container_name: developed-platform-be
+    build:
+      context: ./../../config/api/php
+      args:
+        UID: $U_ID
+    environment:
+      PHP_IDE_CONFIG: serverName=Docker
+      PHP_XDEBUG_ENABLED: 1
+      XDEBUG_CONFIG: remote_host=10.20.0.5 remote_port=9005 # Linux users
+    #      XDEBUG_CONFIG: remote_host=host.docker.internal remote_port=9005 # MacOS users
+    volumes:
+      - ./../../code/php:/appdata/www
+      - ./../../log/php/api:/log
+      - ./../../config/api/php/xdebug-linux.ini:/usr/local/etc/php/conf.d/xdebug.ini
+      #      - ./docker/php/xdebug-macos.ini:/usr/local/etc/php/conf.d/xdebug.ini
+      - ~/.ssh/id_rsa:/home/appuser/.ssh/id_rsa
+    networks:
+      dev_net:
+        ipv4_address: 10.20.0.5
+networks:
+  dev_net:
+    external:
+      name: network_dev_net

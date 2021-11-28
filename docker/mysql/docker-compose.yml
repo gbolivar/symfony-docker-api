@@ -1,0 +1,24 @@
+version: '3.5'
+services:
+  developed-platform-db:
+    container_name: developed-platform-db
+    build:
+      context: ./../../config/database
+    ports:
+      - ${PORT_EXT}:${PORT_INT}
+    environment:
+      MYSQL_DATABASE: ${DATABASE}
+      MYSQL_USER: ${USER}
+      MYSQL_PASSWORD: ${PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${ROOT_PASSWORD}
+    command: mysqld --sql_mode="STRICT_ALL_TABLES,NO_ENGINE_SUBSTITUTION"
+    volumes:
+      - ./../../data/mysql:/var/lib/mysql
+    networks:
+      dev_net:
+        ipv4_address: 10.20.0.2
+
+networks:
+  dev_net:
+    external:
+      name: network_dev_net
